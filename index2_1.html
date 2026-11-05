@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday ✨🌸</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600;700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dreamPink: '#FF8DA1',
+            softRose: '#FFB6C1',
+            lightCream: '#FFF5F7',
+            deepBerry: '#800F2F',
+            accentGold: '#FFB703',
+            glowPink: '#FF758F'
+          },
+          fontFamily: {
+            hand: ['Dancing Script', 'cursive'],
+            sans: ['Montserrat', 'sans-serif'],
+            cute: ['Fredoka', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { touch-action: manipulation; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(circle at center, #FFE6EE 0%, #FFB6C1 50%, #FF8DA1 100%);
+      color: #4A2E35;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 100vh;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 2rem;
+      box-shadow: 0 15px 35px rgba(164, 19, 60, 0.15);
+    }
+
+    /* GIFT BOX STYLES */
+    #gift-wrapper {
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #gift-wrapper:hover { transform: scale(1.05); }
+
+    .gift-box {
+      position: relative;
+      width: 180px;
+      height: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      animation: floatGift 3s infinite ease-in-out;
+    }
+
+    .gift-body {
+      position: relative;
+      width: 160px;
+      height: 110px;
+      background: linear-gradient(135deg, #FF4D6D, #C9184A);
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 20px 40px rgba(201, 24, 74, 0.35);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    .body-ribbon {
+      width: 32px;
+      height: 100%;
+      background: linear-gradient(90deg, #FFB703, #FFF0F5, #FFB703);
+    }
+
+    .gift-lid {
+      position: absolute;
+      top: 16px;
+      width: 180px;
+      height: 34px;
+      background: linear-gradient(135deg, #FF758F, #FF4D6D);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+    }
+
+    .lid-ribbon {
+      width: 32px;
+      height: 100%;
+      background: linear-gradient(90deg, #FFB703, #FFF0F5, #FFB703);
+    }
+
+    .ribbon-bow {
+      position: absolute;
+      top: -12px;
+      width: 56px;
+      height: 30px;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ribbon-bow::before, .ribbon-bow::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border: 5px solid #FFB703;
+      box-sizing: border-box;
+      box-shadow: 0 0 8px rgba(255, 183, 3, 0.5);
+    }
+
+    .ribbon-bow::before { left: 2px; border-radius: 50% 50% 0 50%; transform: rotate(45deg); }
+    .ribbon-bow::after { right: 2px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+
+    .open-lid {
+      transform: translateY(-180px) rotate(-20deg) scale(1.05) !important;
+      opacity: 0 !important;
+    }
+
+    .fade-wrapper {
+      opacity: 0 !important;
+      transform: translateY(30px) scale(0.85) !important;
+    }
+
+    /* CANDLE ANIMATION */
+    @keyframes flameBounce {
+      0%, 100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 8px #FFB703); }
+      50% { transform: scale(1.2) rotate(3deg); filter: drop-shadow(0 0 14px #FF4D6D); }
+    }
+    .flame-anim { animation: flameBounce 0.4s infinite alternate; transform-origin: bottom center; }
+
+    @keyframes floatGift {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 0.7; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.02); }
+    }
+    .pulse-anim { animation: pulseText 1.5s infinite alternate; }
+
+    .cursor {
+      display: inline-block;
+      font-weight: bold;
+      color: #A4133C;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255, 230, 238, 0.5); }
+    ::-webkit-scrollbar-thumb { background: rgba(201, 24, 74, 0.4); border-radius: 10px; }
+  </style>
+</head>
+
+<body class="relative min-h-screen select-none flex flex-col justify-between items-center py-6">
+
+  <!-- Ambient Canvas Background -->
+  <canvas id="ambientCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+  <!-- NAVBAR CONTROL -->
+  <header class="z-40 w-full max-w-lg px-4">
+    <div class="glass-card p-3 flex justify-between items-center shadow-md">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl animate-bounce">🌸</span>
+        <span class="font-hand text-xl font-bold text-red-600">Chúc mừng sinh nhật</span>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <button onclick="triggerConfetti()" class="px-3 py-1 bg-pink-100 hover:bg-pink-200 border border-pink-300 text-red-600 rounded-xl text-xs font-bold transition active:scale-95 shadow-sm">
+          ✨ Tung Hoa
+        </button>
+        <button id="bgmBtn" onclick="toggleBGM()" class="px-3 py-1 bg-gradient-to-r from-pink-400 to-rose-400 hover:opacity-90 active:scale-95 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm">
+          <i id="bgmIcon" class="fas fa-music"></i>
+          <span id="bgmText">Nhạc</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- INITIAL GIFT WRAPPER (STEP 1) -->
+  <div id="gift-wrapper" onclick="openGift()" class="z-10 text-center cursor-pointer my-auto flex flex-col items-center justify-center p-4">
+    <div class="gift-box">
+      <div class="ribbon-bow"></div>
+      <div class="gift-lid" id="giftLid">
+        <div class="lid-ribbon"></div>
+      </div>
+      <div class="gift-body">
+        <div class="body-ribbon"></div>
+      </div>
+    </div>
+    <p class="instruction mt-8 text-lg sm:text-xl font-extrabold text-red-700 pulse-anim drop-shadow-sm font-cute">
+      ✨ Tui có quà cho bạn nè😁🎁 ✨
+    </p>
+  </div>
+
+  <!-- MAIN CARD CONTAINER (STEP 2 - HIDDEN AT START) -->
+  <main id="card-container" class="hidden z-10 w-full max-w-xl px-4 my-auto space-y-6">
+    
+    <!-- CARD WITH TYPED MESSAGE -->
+    <div class="glass-card p-6 text-center space-y-4 shadow-xl">
+      <div class="text-5xl animate-bounce">🎂🌸</div>
+      <h1 class="card-title font-hand text-4xl sm:text-5xl text-red-600 font-bold">
+        Happy Birthday! ✨
+      </h1>
+
+      <div class="message-wrapper max-h-60 overflow-y-auto px-2 text-justify bg-white/50 p-4 rounded-2xl border border-pink-200">
+        <p id="typed-message" class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium"></p>
+        <span id="cursor" class="cursor">|</span>
+      </div>
+
+      <div class="pt-2 flex justify-center">
+        <button onclick="scrollToSection('cakeSection')" class="px-5 py-2 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold text-xs rounded-full shadow-md hover:opacity-90 transition active:scale-95 flex items-center gap-2">
+          <span>Khám phá bánh sinh nhật & Mini Game</span> <i class="fas fa-arrow-down"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- CAKE & CANDLE SECTION -->
+    <section id="cakeSection" class="glass-card p-6 flex flex-col items-center shadow-xl">
+      <div class="text-center space-y-1 mb-3">
+        <h3 class="text-xl font-bold text-red-600 font-cute flex items-center justify-center gap-2">
+          🎂 Bánh Sinh Nhật Tuổi 18
+        </h3>
+        <p class="text-xs text-slate-600 font-cute">Chạm vào nến để thổi tắt & ước nguyện điều tốt đẹp nhất!</p>
+      </div>
+
+      <div class="relative w-full max-w-xs flex flex-col items-center justify-center my-2">
+        <div id="cakeBody" onclick="blowCandle()" class="cursor-pointer group flex flex-col items-center justify-center p-2 transition-transform duration-200 active:scale-95 relative">
+          
+          <!-- Candle 18 -->
+          <div class="relative flex items-end justify-center mb-[-6px] z-30">
+            <div class="flex flex-col items-center">
+              <div class="flame-node flame-anim w-6 h-8 bg-gradient-to-t from-amber-300 via-orange-400 to-red-500 rounded-full shadow-lg"></div>
+              <div class="px-3 py-0.5 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-extrabold text-sm rounded-xl border-2 border-white shadow-md">
+                18
+              </div>
+            </div>
+          </div>
+
+          <!-- Cake Layers -->
+          <div class="w-44 h-14 bg-gradient-to-r from-pink-300 via-rose-300 to-pink-300 rounded-t-3xl border-b-4 border-pink-400 shadow-inner flex items-center justify-center px-3 relative overflow-hidden">
+            <div class="absolute top-0 inset-x-0 h-3 bg-white/40 rounded-b-xl"></div>
+            <div class="z-10 text-base flex justify-around w-full">
+              <span>🍓</span><span>🌸</span><span>🍓</span>
+            </div>
+          </div>
+
+          <div class="w-56 h-16 bg-gradient-to-r from-amber-100 via-pink-200 to-amber-100 rounded-b-3xl border-t-4 border-pink-300 shadow-md flex items-center justify-center relative">
+            <span class="bg-white/90 text-red-500 font-bold text-xs px-3 py-0.5 rounded-full border border-red-200 shadow-sm">
+              HAPPY 18th BIRTHDAY LIÊN 🌸
+            </span>
+          </div>
+
+          <div class="w-64 h-3 bg-pink-200 rounded-full shadow-sm -mt-1 border border-pink-300"></div>
+        </div>
+
+        <button id="blowBtn" onclick="blowCandle()" class="mt-4 px-5 py-2 bg-gradient-to-r from-pink-400 to-rose-400 hover:opacity-90 active:scale-95 text-white font-bold rounded-2xl shadow-md transition text-xs flex items-center gap-2">
+          <i class="fas fa-wind"></i>
+          <span>THỔI NẾN VÀ ƯỚC ĐIỀU ƯỚC 🎂</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- MINI-GAMES SECTION -->
+    <section class="glass-card p-6 flex flex-col items-center shadow-xl space-y-4">
+      <div class="text-center space-y-1">
+        <h3 class="text-xl font-bold text-red-600 font-cute flex items-center justify-center gap-2">
+          🎮 Arcade Mini-Games Tuổi 18
+        </h3>
+        <p class="text-xs text-slate-600 font-cute">Thư giãn với trò chơi hứng hoa hoặc đập bong bóng ước mơ!</p>
+      </div>
+
+      <!-- Game Switcher Tabs -->
+      <div class="flex bg-pink-100/80 p-1 rounded-2xl border border-pink-300 gap-1">
+        <button id="tabCatchBtn" onclick="switchGame('catch')" class="px-4 py-1.5 rounded-xl font-bold text-xs bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-sm transition">
+          🌸 Hứng Hoa Sakura
+        </button>
+        <button id="tabBubbleBtn" onclick="switchGame('bubble')" class="px-4 py-1.5 rounded-xl font-bold text-xs text-red-600 hover:bg-pink-200/50 transition">
+          🎈 Săn Bong Bóng
+        </button>
+      </div>
+
+      <!-- GAME 1: CATCHING STARS & SAKURA -->
+      <div id="gameCatchArea" class="w-full flex flex-col items-center space-y-3">
+        <div class="w-full flex justify-between items-center text-xs font-bold text-red-600 px-2">
+          <span>Điểm: <span id="catchScore">0</span></span>
+          <span>Kỷ lục: <span id="catchHighScore">0</span></span>
+        </div>
+
+        <div class="relative w-full h-64 bg-gradient-to-b from-pink-50 to-pink-100/80 rounded-2xl border-2 border-pink-200 overflow-hidden shadow-inner">
+          <canvas id="catchCanvas" width="340" height="250" class="w-full h-full"></canvas>
+        </div>
+
+        <div class="flex gap-2 w-full max-w-xs">
+          <button id="catchStartBtn" onclick="toggleCatchGame()" class="flex-1 py-2 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold rounded-xl text-xs shadow-md active:scale-95 transition">
+            ▶️ CHƠI HỨNG HOA
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 font-cute text-center">
+          📱 <b>Điện thoại:</b> Vuốt/Chạm để di chuyển giỏ | 💻 <b>PC:</b> Phím Phím ◄ ► / A-D
+        </p>
+      </div>
+
+      <!-- GAME 2: BUBBLE POPPING (HIDDEN INITIALLY) -->
+      <div id="gameBubbleArea" class="hidden w-full flex flex-col items-center space-y-3">
+        <div class="w-full flex justify-between items-center text-xs font-bold text-red-600 px-2">
+          <span>Bóng đã đập: <span id="bubbleScore">0</span></span>
+          <span class="text-pink-500">🎈 Nhanh tay đập bóng!</span>
+        </div>
+
+        <div id="bubbleBox" class="relative w-full h-64 bg-gradient-to-b from-purple-50 to-pink-100/80 rounded-2xl border-2 border-pink-200 overflow-hidden shadow-inner flex items-center justify-center">
+          <p id="bubbleHint" class="text-xs text-pink-400 font-cute animate-pulse">Bấm nút bên dưới để thả bong bóng!</p>
+        </div>
+
+        <button id="bubbleStartBtn" onclick="toggleBubbleGame()" class="w-full max-w-xs py-2 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-bold rounded-xl text-xs shadow-md active:scale-95 transition">
+          ▶️ BẮT ĐẦU SĂN BONG BÓNG
+        </button>
+      </div>
+    </section>
+
+    <!-- GACHA WHEEL SECTION -->
+    <section class="glass-card p-6 flex flex-col items-center shadow-xl">
+      <div class="text-center space-y-1 mb-4">
+        <h3 class="text-xl font-bold text-red-600 font-cute flex items-center justify-center gap-2">
+          🎰 Vòng Quay "Điều Mộng Mơ Tuổi 18"
+        </h3>
+        <p class="text-xs text-slate-600 font-cute">Quay ngẫu nhiên lá thư may mắn dành riêng cho Liên!</p>
+      </div>
+
+      <div class="relative flex flex-col items-center justify-center">
+        <div class="absolute -top-3 z-20 text-red-600 text-xl filter drop-shadow">▼</div>
+
+        <div class="w-60 h-60 rounded-full border-4 border-pink-300 shadow-md relative overflow-hidden flex items-center justify-center">
+          <canvas id="gachaCanvas" width="280" height="280" class="w-full h-full rounded-full transition-transform duration-[3500ms] cubic-bezier(0.15, 0.99, 0.24, 1)"></canvas>
+          <div class="absolute w-10 h-10 bg-white border-2 border-pink-400 rounded-full flex items-center justify-center text-lg shadow-md">
+            🌸
+          </div>
+        </div>
+
+        <button id="spinBtn" onclick="spinWheel()" class="mt-4 px-6 py-2 bg-gradient-to-r from-pink-400 to-rose-400 hover:opacity-90 active:scale-95 text-white font-bold rounded-2xl shadow-md transition text-xs flex items-center gap-2">
+          <i class="fas fa-dice"></i>
+          <span>QUAY VÒNG QUAY MAY MẮN!</span>
+        </button>
+      </div>
+
+      <div id="gachaResultBox" class="mt-4 hidden p-3 bg-pink-50 border border-pink-200 rounded-2xl text-center max-w-sm w-full animate-bounce">
+        <span class="text-xs text-red-600 font-bold block">🎉 Lá Thư Tuổi 18 Của Liên:</span>
+        <p id="gachaResultText" class="text-sm font-extrabold text-red-600 mt-0.5 font-cute"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full max-w-lg text-center text-xs text-red-800 py-3 font-cute border-t border-pink-200/60 z-10 mt-auto">
+    Happy 18th Birthday • Made with ❤️ for Liên ✨🌸
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // --- 1. AMBIENT CANVAS BACKGROUND ---
+    const canvas = document.getElementById('ambientCanvas');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let particles = [];
+    let ambientTimer = 0;
+    const MAX_PARTICLES = 45;
+    const floatingIcons = ['🌸', '✨', '💖', '🎂', '🎉', '🍀'];
+    const cachedCanvases = {};
+
+    floatingIcons.forEach(icon => {
+      const offscreen = document.createElement('canvas');
+      offscreen.width = 36;
+      offscreen.height = 36;
+      const offCtx = offscreen.getContext('2d');
+      offCtx.font = '22px serif';
+      offCtx.textBaseline = 'middle';
+      offCtx.textAlign = 'center';
+      offCtx.fillText(icon, 18, 18);
+      cachedCanvases[icon] = offscreen;
+    });
+
+    class Particle {
+      constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.alpha = 1;
+
+        if (type === 'floating_icon') {
+          this.icon = floatingIcons[Math.floor(Math.random() * floatingIcons.length)];
+          this.speedY = Math.random() * -1.8 - 0.8;
+          this.speedX = (Math.random() - 0.5) * 0.8;
+          this.decay = Math.random() * 0.004 + 0.002;
+        } else {
+          this.size = Math.random() * 4 + 2;
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 4 + 2;
+          this.speedX = Math.cos(angle) * speed;
+          this.speedY = Math.sin(angle) * speed;
+          this.friction = 0.94;
+          this.gravity = 0.12;
+          this.color = `hsl(${Math.random() * 40 + 330}, 90%, 65%)`;
+          this.decay = Math.random() * 0.02 + 0.01;
+        }
+      }
+
+      update() {
+        if (this.type === 'firework_spark') {
+          this.speedX *= this.friction;
+          this.speedY *= this.friction;
+          this.speedY += this.gravity;
+        }
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= this.decay;
+      }
+
+      draw() {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+
+        if (this.type === 'floating_icon') {
+          ctx.drawImage(cachedCanvases[this.icon], this.x - 18, this.y - 18);
+        } else {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    function createBurst(x, y, count = 25) {
+      for (let i = 0; i < count; i++) {
+        if (particles.length < MAX_PARTICLES + 30) {
+          particles.push(new Particle(x, y, 'firework_spark'));
+        }
+      }
+    }
+
+    function handleAmbientEffects() {
+      ambientTimer++;
+      if (ambientTimer % 16 === 0 && particles.length < MAX_PARTICLES) {
+        particles.push(new Particle(Math.random() * canvas.width, canvas.height + 20, 'floating_icon'));
+      }
+      if (ambientTimer % 100 === 0) {
+        const x = Math.random() * (canvas.width - 80) + 40;
+        const y = Math.random() * (canvas.height * 0.4) + 40;
+        createBurst(x, y, 18);
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      handleAmbientEffects();
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw();
+        if (p.alpha <= 0) particles.splice(i, 1);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    function triggerConfetti() {
+      confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+      playSFX('cheer');
+    }
+
+    // --- 2. MESSAGE & GIFT OPENING ---
+    const fullMessage = "Hôm nay 6/11 rùi, tui chúc người đẹp bước sang tuổi 18 thật rực rỡ và vui vẻ nhé! 🎂✨ Tui không biết tặng gì hơn nên chỉ tự tay làm chiếc thiệp nho nhỏ này thôi, hy vọng Liên sẽ thích nha 😅. Sang tuổi mới rồi, mong Liên hãy bỏ lại hết mọi ưu phiền, mạnh mẽ vượt qua mọi thử thách để tiếp tục nỗ lực trên con đường của mình nhé! 🌸💪 Chớ buồn bã hay suy nghĩ tiêu cực nè, nhớ rằng dù có chuyện gì thì vẫn luôn có tui ở đây sẵn sàng lắng nghe và tâm sự cùng Liên 🤫💖. Chúc cho chặng đường phía trước của Liên sẽ luôn ngập tràn những điều tốt đẹp và may mắn nhất! 🍀✨ Dài dòng vậy thôi, chúc mừng sinh nhật tuổi 18 nha cô gái dễ thương!!! 🥰🥂💖";
+
+    function typeWriter(text, elementId, speed = 20) {
+      let index = 0;
+      const element = document.getElementById(elementId);
+      const cursor = document.getElementById('cursor');
+      element.innerHTML = '';
+
+      function type() {
+        if (index < text.length) {
+          element.innerHTML += text.charAt(index);
+          index++;
+          const container = document.querySelector('.message-wrapper');
+          container.scrollTop = container.scrollHeight;
+          setTimeout(type, speed);
+        } else {
+          setTimeout(() => { if (cursor) cursor.style.display = 'none'; }, 800);
+        }
+      }
+      type();
+    }
+
+    function openGift() {
+      const giftLid = document.getElementById('giftLid');
+      const giftWrapper = document.getElementById('gift-wrapper');
+      const cardContainer = document.getElementById('card-container');
+
+      giftLid.classList.add('open-lid');
+
+      const rect = giftWrapper.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      setTimeout(() => { createBurst(centerX, centerY, 35); }, 150);
+      setTimeout(() => { giftWrapper.classList.add('fade-wrapper'); }, 300);
+
+      setTimeout(() => {
+        giftWrapper.style.display = 'none';
+        cardContainer.classList.remove('hidden');
+        typeWriter(fullMessage, 'typed-message', 20);
+        triggerConfetti();
+      }, 600);
+    }
+
+    // --- 3. CAKE & CANDLE ---
+    let isCandleLit = true;
+    function blowCandle() {
+      if (!isCandleLit) return;
+      isCandleLit = false;
+      document.querySelectorAll('.flame-node').forEach(f => {
+        f.style.transition = 'opacity 0.4s, transform 0.4s';
+        f.style.opacity = '0';
+        f.style.transform = 'scale(0.1)';
+      });
+      const blowBtn = document.getElementById('blowBtn');
+      blowBtn.innerHTML = '<i class="fas fa-check-circle"></i><span>ĐÃ THỔI NẾN! ƯỚC THÀNH CÔNG 🎉</span>';
+      blowBtn.className = "mt-4 px-5 py-2 bg-emerald-500 text-white font-bold rounded-2xl shadow-md transition text-xs flex items-center gap-2";
+      triggerConfetti();
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // --- 4. MINI-GAMES LOGIC ---
+    function switchGame(gameType) {
+      const catchArea = document.getElementById('gameCatchArea');
+      const bubbleArea = document.getElementById('gameBubbleArea');
+      const tabCatchBtn = document.getElementById('tabCatchBtn');
+      const tabBubbleBtn = document.getElementById('tabBubbleBtn');
+
+      if (gameType === 'catch') {
+        catchArea.classList.remove('hidden');
+        bubbleArea.classList.add('hidden');
+        tabCatchBtn.className = "px-4 py-1.5 rounded-xl font-bold text-xs bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-sm transition";
+        tabBubbleBtn.className = "px-4 py-1.5 rounded-xl font-bold text-xs text-red-600 hover:bg-pink-200/50 transition";
+      } else {
+        catchArea.classList.add('hidden');
+        bubbleArea.classList.remove('hidden');
+        tabBubbleBtn.className = "px-4 py-1.5 rounded-xl font-bold text-xs bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-sm transition";
+        tabCatchBtn.className = "px-4 py-1.5 rounded-xl font-bold text-xs text-red-600 hover:bg-pink-200/50 transition";
+      }
+    }
+
+    // GAME 1: CATCHING SAKURA
+    const cCanvas = document.getElementById('catchCanvas');
+    const cCtx = cCanvas.getContext('2d');
+    let catchActive = false;
+    let catchScore = 0;
+    let catchHighScore = localStorage.getItem('lien_catch_hs') || 0;
+    document.getElementById('catchHighScore').textContent = catchHighScore;
+
+    let basket = { x: 140, y: 215, w: 60, h: 25 };
+    let catchItems = [];
+    const catchIcons = ['🌸', '✨', '🍓', '💖', '⭐'];
+
+    cCanvas.addEventListener('mousemove', (e) => {
+      const rect = cCanvas.getBoundingClientRect();
+      basket.x = e.clientX - rect.left - basket.w / 2;
+    });
+
+    cCanvas.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const rect = cCanvas.getBoundingClientRect();
+        basket.x = e.touches[0].clientX - rect.left - basket.w / 2;
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'a') basket.x -= 20;
+      if (e.key === 'ArrowRight' || e.key === 'd') basket.x += 20;
+    });
+
+    function toggleCatchGame() {
+      catchActive = !catchActive;
+      const btn = document.getElementById('catchStartBtn');
+      if (catchActive) {
+        btn.textContent = "⏸️ TẠM DỪNG";
+        catchScore = 0;
+        document.getElementById('catchScore').textContent = 0;
+        catchItems = [];
+        runCatchLoop();
+      } else {
+        btn.textContent = "▶️ CHƠI HỨNG HOA";
+      }
+    }
+
+    function runCatchLoop() {
+      if (!catchActive) return;
+      cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+
+      // Bound basket
+      if (basket.x < 0) basket.x = 0;
+      if (basket.x + basket.w > cCanvas.width) basket.x = cCanvas.width - basket.w;
+
+      // Draw Basket
+      cCtx.fillStyle = "#FF758F";
+      cCtx.beginPath();
+      cCtx.roundRect(basket.x, basket.y, basket.w, basket.h, 12);
+      cCtx.fill();
+      cCtx.fillStyle = "#FFFFFF";
+      cCtx.font = "bold 12px Fredoka, sans-serif";
+      cCtx.fillText("🧺 Giỏ Hoa", basket.x + 8, basket.y + 17);
+
+      // Spawn Items
+      if (Math.random() < 0.05) {
+        catchItems.push({
+          x: Math.random() * (cCanvas.width - 24),
+          y: -20,
+          speed: Math.random() * 2 + 1.5,
+          icon: catchIcons[Math.floor(Math.random() * catchIcons.length)]
+        });
+      }
+
+      // Update & Draw Items
+      for (let i = catchItems.length - 1; i >= 0; i--) {
+        let it = catchItems[i];
+        it.y += it.speed;
+
+        cCtx.font = "20px serif";
+        cCtx.fillText(it.icon, it.x, it.y);
+
+        // Catch Collision
+        if (it.y >= basket.y - 10 && it.y <= basket.y + basket.h && it.x >= basket.x - 10 && it.x <= basket.x + basket.w) {
+          catchScore += 10;
+          document.getElementById('catchScore').textContent = catchScore;
+          if (catchScore > catchHighScore) {
+            catchHighScore = catchScore;
+            localStorage.setItem('lien_catch_hs', catchHighScore);
+            document.getElementById('catchHighScore').textContent = catchHighScore;
+          }
+          playSFX('coin');
+          catchItems.splice(i, 1);
+          continue;
+        }
+
+        if (it.y > cCanvas.height + 20) {
+          catchItems.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(runCatchLoop);
+    }
+
+    // GAME 2: BUBBLE POPPING
+    let bubbleActive = false;
+    let bubbleScore = 0;
+    let bubbleInterval = null;
+
+    function toggleBubbleGame() {
+      bubbleActive = !bubbleActive;
+      const btn = document.getElementById('bubbleStartBtn');
+      const box = document.getElementById('bubbleBox');
+
+      if (bubbleActive) {
+        btn.textContent = "⏹️ DỪNG THẢ BONG BÓNG";
+        document.getElementById('bubbleHint').classList.add('hidden');
+        bubbleScore = 0;
+        document.getElementById('bubbleScore').textContent = 0;
+        
+        bubbleInterval = setInterval(() => {
+          if (!bubbleActive) return;
+          createBubble();
+        }, 600);
+      } else {
+        btn.textContent = "▶️ BẮT ĐẦU SĂN BONG BÓNG";
+        clearInterval(bubbleInterval);
+        box.querySelectorAll('.bubble-node').forEach(b => b.remove());
+      }
+    }
+
+    function createBubble() {
+      const box = document.getElementById('bubbleBox');
+      const bubble = document.createElement('div');
+      const icons = ['✨', '🌸', '💖', '⭐', '🎈'];
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+      bubble.className = "bubble-node absolute cursor-pointer flex items-center justify-center text-lg bg-pink-200/60 border-2 border-pink-400 rounded-full shadow-md transition-transform duration-300 active:scale-125";
+      const size = Math.floor(Math.random() * 20 + 38);
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${Math.random() * (box.clientWidth - size)}px`;
+      bubble.style.bottom = `-50px`;
+      bubble.innerHTML = randomIcon;
+
+      let pos = -50;
+      const speed = Math.random() * 1.5 + 1;
+      const timer = setInterval(() => {
+        if (!bubbleActive) { clearInterval(timer); bubble.remove(); return; }
+        pos += speed;
+        bubble.style.bottom = `${pos}px`;
+        if (pos > box.clientHeight + 40) {
+          clearInterval(timer);
+          bubble.remove();
+        }
+      }, 16);
+
+      bubble.onclick = () => {
+        bubbleScore++;
+        document.getElementById('bubbleScore').textContent = bubbleScore;
+        playSFX('coin');
+        clearInterval(timer);
+        bubble.style.transform = "scale(1.5)";
+        bubble.style.opacity = "0";
+        setTimeout(() => bubble.remove(), 200);
+      };
+
+      box.appendChild(bubble);
+    }
+
+    // --- 5. GACHA WHEEL ---
+    const gachaCanvas = document.getElementById('gachaCanvas');
+    const gCtx = gachaCanvas.getContext('2d');
+    const prizes = [
+      "Xinh Đẹp & Rạng Rỡ 🌸",
+      "Pass Mọi Kỳ Thi 4.0 🎓",
+      "Luôn Luôn Hạnh Phúc ✨",
+      "Vạn Sự May Mắn 🍀",
+      "Bình An & Vui Vẻ 💖",
+      "Sức Khỏe Dồi Dào 🌟"
+    ];
+    const prizeColors = ['#FF758F', '#FFB6C1', '#FF4D6D', '#FFB703', '#F72585', '#7209B7'];
+
+    function drawWheel() {
+      const slices = prizes.length;
+      const angle = (2 * Math.PI) / slices;
+      const r = gachaCanvas.width / 2;
+
+      for (let i = 0; i < slices; i++) {
+        const a = i * angle;
+        gCtx.beginPath();
+        gCtx.fillStyle = prizeColors[i];
+        gCtx.moveTo(r, r);
+        gCtx.arc(r, r, r, a, a + angle);
+        gCtx.closePath();
+        gCtx.fill();
+
+        gCtx.save();
+        gCtx.translate(r, r);
+        gCtx.rotate(a + angle / 2);
+        gCtx.textAlign = "right";
+        gCtx.fillStyle = "#FFFFFF";
+        gCtx.font = "bold 11px Fredoka, sans-serif";
+        gCtx.fillText(prizes[i].substring(0, 16), r - 10, 4);
+        gCtx.restore();
+      }
+    }
+    drawWheel();
+
+    let wheelRotation = 0;
+    let isSpinning = false;
+    function spinWheel() {
+      if (isSpinning) return;
+      isSpinning = true;
+      document.getElementById('gachaResultBox').classList.add('hidden');
+
+      const prizeIdx = Math.floor(Math.random() * prizes.length);
+      const sliceAngle = 360 / prizes.length;
+      const targetDeg = 360 * 4 + (360 - (prizeIdx * sliceAngle + sliceAngle / 2));
+
+      wheelRotation += targetDeg;
+      gachaCanvas.style.transform = `rotate(${wheelRotation}deg)`;
+      playSFX('coin');
+
+      setTimeout(() => {
+        isSpinning = false;
+        document.getElementById('gachaResultText').textContent = prizes[prizeIdx];
+        document.getElementById('gachaResultBox').classList.remove('hidden');
+        triggerConfetti();
+      }, 3500);
+    }
+
+    // --- 6. AUDIO SYNTH ---
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSFX(type) {
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      if (type === 'coin') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.setValueAtTime(1174.66, now + 0.08);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+      } else if (type === 'cheer') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523, now);
+        osc.frequency.setValueAtTime(659, now + 0.1);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+      }
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }
+
+    let isBgmPlaying = false;
+    let bgmTimeout = null;
+
+    function playBGM() {
+      if (!isBgmPlaying || !audioCtx) return;
+      const notes = [
+        { f: 261.63, d: 250 }, { f: 261.63, d: 250 }, { f: 293.66, d: 500 }, { f: 261.63, d: 500 }, { f: 349.23, d: 500 }, { f: 329.63, d: 700 },
+        { f: 261.63, d: 250 }, { f: 261.63, d: 250 }, { f: 293.66, d: 500 }, { f: 261.63, d: 500 }, { f: 392.00, d: 500 }, { f: 349.23, d: 700 }
+      ];
+      let timeOffset = 0;
+      notes.forEach(n => {
+        setTimeout(() => {
+          if (!isBgmPlaying) return;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = n.f;
+          gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (n.d / 1000));
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + (n.d / 1000));
+        }, timeOffset);
+        timeOffset += n.d + 50;
+      });
+      bgmTimeout = setTimeout(playBGM, timeOffset + 400);
+    }
+
+    function toggleBGM() {
+      initAudio();
+      isBgmPlaying = !isBgmPlaying;
+      const icon = document.getElementById('bgmIcon');
+      const text = document.getElementById('bgmText');
+
+      if (isBgmPlaying) {
+        icon.className = "fas fa-pause";
+        text.textContent = "Tắt Nhạc";
+        playBGM();
+      } else {
+        icon.className = "fas fa-music";
+        text.textContent = "Nhạc";
+        if (bgmTimeout) clearTimeout(bgmTimeout);
+      }
+    }
+  </script>
+</body>
+</html>
